@@ -36,7 +36,7 @@ func BareToDigestHex(bare []byte) string {
 	return hex.EncodeToString(sum[:])
 }
 
-func Bare(hello *tlsx.ClientHelloBasic, shouldSort bool) []byte {
+func Bare(hello *tlsx.ClientHelloBasic) []byte {
 	var (
 		maxPossibleBufferLength = 5 + 1 + // Version = uint16 => maximum = 65536 = 5chars + 1 field sep
 			(5+1)*len(hello.CipherSuites) + // CipherSuite = uint16 => maximum = 65536 = 5chars
@@ -79,11 +79,9 @@ func Bare(hello *tlsx.ClientHelloBasic, shouldSort bool) []byte {
 	 *	Extensions
 	 */
 	// sort extensions
-	if shouldSort {
-		sort.Slice(hello.AllExtensions, func(i, j int) bool {
-			return hello.AllExtensions[i] < hello.AllExtensions[j]
-		})
-	}
+	sort.Slice(hello.AllExtensions, func(i, j int) bool {
+		return hello.AllExtensions[i] < hello.AllExtensions[j]
+	})
 	// collect extensions
 	lastElem = len(hello.AllExtensions) - 1
 	if len(hello.AllExtensions) > 1 {

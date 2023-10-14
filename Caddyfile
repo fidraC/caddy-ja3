@@ -1,7 +1,7 @@
 {
   debug
   order ja3 before respond
-  http_port 8080
+  http_port 8000
   servers {
      listener_wrappers {
        http_redirect
@@ -12,7 +12,7 @@
 }
 
 localhost:2020 {
-  ja3 sort_ja3 true
+  ja3 block_bots true
   tls internal
-  respond "Your JA3: {header.ja3}"
+  reverse_proxy http://127.0.0.1:8080
 }
